@@ -1,0 +1,6 @@
+apiVersion: helloworld.apimeister.com/v1
+kind: Person
+metadata:
+  name: patrick
+spec:
+  memberOf: blue

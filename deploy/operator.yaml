@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello-world-operator
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hello-world-operator
+  template:
+    metadata:
+      labels:
+        app: hello-world-operator
+    spec:
+      serviceAccountName: hello-world-operator-account
+      containers:
+      - name: hello-world-operator
+        image: gcr.io/apimeister/hello-world-operator
+        resources:
+          requests:
+            memory: "10Mi"
+            cpu: "10m"
+          limits:
+            memory: "20Mi"
+            cpu: "100m"

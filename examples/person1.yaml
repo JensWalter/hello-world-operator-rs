@@ -1,0 +1,5 @@
+apiVersion: helloworld.apimeister.com/v1
+kind: Person
+metadata:
+  name: spongebob
+spec: {}
