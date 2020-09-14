@@ -9,6 +9,6 @@ COPY src ./src
 RUN cargo build --release
 
 # Bundle Stage
-FROM rust:1.46.0-alpine as final
+FROM alpine as final
 COPY --from=builder /usr/src/hello-world-operator/target/release/hello-world-operator .
 CMD ["./hello-world-operator"]
