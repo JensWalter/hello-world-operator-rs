@@ -6,9 +6,9 @@ use kube_derive::CustomResource;
 use kube::config::Config;
 
 #[derive(CustomResource, Serialize, Deserialize, Default, Clone, Debug)]
-#[kube(group = "helloworld.apimeister.com", version = "v1", kind="Person", namespaced)]
+#[kube(group = "helloworld.apimeister.com", version = "v1", kind="Member", namespaced)]
 #[allow(non_snake_case)]
-pub struct PersonSpec {
+pub struct MemberSpec {
   pub memberOf: Option<String>
 }
 
@@ -18,27 +18,27 @@ async fn main() -> Result<(), kube::Error>  {
     let config = Config::infer().await?;
     let client: kube::Client = Client::new(config);
 
-    let crds: Api<Person> = Api::namespaced(client, "default");
+    let crds: Api<Member> = Api::namespaced(client, "default");
     let lp = ListParams::default();
 
-    println!("subscribing events of type person.helloworld.apimeister.com/v1");
+    println!("subscribing events of type members.helloworld.apimeister.com/v1");
     let mut stream = crds.watch(&lp, "0").await?.boxed();
     while let Some(status) = stream.try_next().await? {
         match status {
-            WatchEvent::Added(person) => {
-              match person.spec.memberOf {
-                None => println!("welcome {}",person.metadata.name.unwrap()),
-                Some(member) => println!("welcome {} to the team {}"
-                          ,person.metadata.name.unwrap()
-                          ,member),
+            WatchEvent::Added(member) => {
+              match member.spec.memberOf {
+                None => println!("welcome {}",member.metadata.name.unwrap()),
+                Some(member_of) => println!("welcome {} to the team {}"
+                          ,member.metadata.name.unwrap()
+                          ,member_of),
               }
             },
-            WatchEvent::Modified(_person) => {
+            WatchEvent::Modified(_member) => {
             },
-            WatchEvent::Deleted(person) => {
-              println!("sad to see you go {}",person.metadata.name.unwrap());
+            WatchEvent::Deleted(member) => {
+              println!("sad to see you go {}",member.metadata.name.unwrap());
             },
-            WatchEvent::Error(person) => println!("error: {}", person),
+            WatchEvent::Error(member) => println!("error: {}", member),
             _ => {}
         }
     }

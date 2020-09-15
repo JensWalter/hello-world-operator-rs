@@ -1,7 +1,7 @@
 apiVersion: apiextensions.k8s.io/v1beta1
 kind: CustomResourceDefinition
 metadata:
-  name: persons.helloworld.apimeister.com
+  name: members.helloworld.apimeister.com
 spec:
   group: helloworld.apimeister.com
   versions:
@@ -10,6 +10,6 @@ spec:
       storage: true
   scope: Namespaced
   names:
-    plural: persons
-    singular: person
-    kind: Person
+    plural: members
+    singular: member
+    kind: Member
