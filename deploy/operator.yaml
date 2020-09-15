@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: hello-world-operator
+  name: hello-world-operator-rs
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: hello-world-operator
+      app: hello-world-operator-rs
   template:
     metadata:
       labels:
-        app: hello-world-operator
+        app: hello-world-operator-rs
     spec:
-      serviceAccountName: hello-world-operator-account
+      serviceAccountName: hello-world-operator-rs-account
       containers:
-      - name: hello-world-operator
-        image: gcr.io/apimeister/hello-world-operator
+      - name: hello-world-operator-rs
+        image: gcr.io/apimeister/hello-world-operator-rs
         resources:
           requests:
             memory: "10Mi"
