@@ -15,7 +15,7 @@ spec:
       serviceAccountName: hello-world-operator-rs-account
       containers:
       - name: hello-world-operator-rs
-        image: docker.pkg.github.com/jenswalter/hello-world-operator-rs/hello-world-operator-rs:latest
+        image: ghcr.io/jenswalter/hello-world-operator-rs
         resources:
           requests:
             memory: "10Mi"
