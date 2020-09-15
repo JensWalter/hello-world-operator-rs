@@ -23,3 +23,7 @@ spec:
           limits:
             memory: "20Mi"
             cpu: "100m"
+        env:
+          - name: KUBERNETES_SERVICE_HOST
+            value: kubernetes.default.svc.cluster.local
+
