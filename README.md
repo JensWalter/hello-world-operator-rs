@@ -27,7 +27,7 @@ This leads to the following output on the operator pod.
 
 This leads to the following output on the operator pod.
 
-    This leads to the following output on the operator pod.
+    welcome patrick to the team blue
 
 
 
