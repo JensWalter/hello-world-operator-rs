@@ -1,11 +1,11 @@
 extern crate serde_derive;
-use kube::{api::{Api, ListParams, WatchEvent}, Client};
+use kube::{api::{Api, ListParams, WatchEvent}, client::Client};
 use futures::{StreamExt, TryStreamExt};
 use serde::{Serialize, Deserialize};
 use kube_derive::CustomResource;
-use kube::config::Config;
+use schemars::JsonSchema;
 
-#[derive(CustomResource, Serialize, Deserialize, Default, Clone, Debug)]
+#[derive(CustomResource, Serialize, Deserialize, Default, Clone, Debug, JsonSchema)]
 #[kube(group = "helloworld.apimeister.com", version = "v1", kind="Member", namespaced)]
 #[allow(non_snake_case)]
 pub struct MemberSpec {
@@ -13,17 +13,16 @@ pub struct MemberSpec {
 }
 
 #[tokio::main]
-async fn main() -> Result<(), kube::Error>  {
+async fn main() {
     println!("starting hello world operator");
-    let config = Config::infer().await?;
-    let client: kube::Client = Client::new(config);
+    let client = Client::try_default().await.expect("cannot infer client config");
 
     let crds: Api<Member> = Api::namespaced(client, "default");
     let lp = ListParams::default();
 
     println!("subscribing events of type members.helloworld.apimeister.com/v1");
-    let mut stream = crds.watch(&lp, "0").await?.boxed();
-    while let Some(status) = stream.try_next().await? {
+    let mut stream = crds.watch(&lp, "0").await.unwrap().boxed();
+    while let Some(status) = stream.try_next().await.expect("watch stream failed") {
         match status {
             WatchEvent::Added(member) => {
               match member.spec.memberOf {
@@ -43,5 +42,4 @@ async fn main() -> Result<(), kube::Error>  {
         }
     }
     println!("done");
-    Ok(())
 }
